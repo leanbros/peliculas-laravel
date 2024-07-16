@@ -17,7 +17,7 @@
             <!-- Logo a la izquierda -->
             <div class="flex items-center">
                 <a href="{{ url('/') }}"
-                   class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                     <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-16">
                 </a>
             </div>
@@ -25,7 +25,8 @@
             <div class="flex-grow flex justify-center">
                 <form action="{{ route('peliculas.lista') }}" method="GET" class="mb-8 w-1/2">
                     <div class="flex">
-                        <input type="text" name="search" placeholder="¿Qué quieres ver hoy?" class="px-4 py-2 border rounded-l-lg focus:outline-none text-black w-full">
+                        <input type="text" name="search" placeholder="¿Qué quieres ver hoy?"
+                            class="px-4 py-2 border rounded-l-lg focus:outline-none text-black w-full">
                         <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-r-lg">Buscar</button>
                     </div>
                 </form>
@@ -35,22 +36,24 @@
             <div class="flex items-center space-x-4">
                 @auth
                 <a href="{{ url('/dashboard') }}"
-                   class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                    class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                     <div class="flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="40px" height="40px">
-                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="40px"
+                            height="40px">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                         </svg>
                         {{ Auth::user()->name }}
                     </div>
                 </a>
                 @else
                 <a href="{{ route('login') }}"
-                   class="rounded-md px-3 py-2 text-white ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                    class="rounded-md px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 dark:bg-gradient-to-r dark:from-blue-700 dark:to-blue-900 dark:text-white dark:hover:from-blue-800 dark:hover:to-blue-950 dark:focus-visible:ring-blue-600">
                     Ingresar
                 </a>
                 @if (Route::has('register'))
                 <a href="{{ route('register') }}"
-                   class="rounded-md px-3 py-2 text-white ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
+                    class="rounded-md px-4 py-2 bg-gradient-to-r from-green-500 to-green-700 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-green-600 hover:to-green-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-300 dark:bg-gradient-to-r dark:from-green-700 dark:to-green-900 dark:text-white dark:hover:from-green-800 dark:hover:to-green-950 dark:focus-visible:ring-green-600">
                     Registrarse
                 </a>
                 @endif
@@ -59,7 +62,8 @@
             @endif
         </header>
 
-        <main class="mt-24 container mx-auto px-4 pb-16"> <!-- Aumentar el margen superior y añadir padding inferior -->
+        <main class="mt-24 container mx-auto px-4 pb-16">
+            <!-- Aumentar el margen superior y añadir padding inferior -->
             @if(request()->filled('search'))
             <div class="mb-8">
                 <h2 class="text-2xl font-bold mb-4 text-white">Resultados de la búsqueda</h2>
@@ -68,7 +72,8 @@
                     <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
                         <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
                             @if($pelicula->image)
-                            <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}" class="w-full h-64 object-cover">
+                            <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}"
+                                class="w-full h-64 object-cover">
                             @endif
                             <div class="p-4">
                                 <h2 class="text-lg font-semibold text-white">{{ $pelicula->title }}</h2>
@@ -86,38 +91,43 @@
                     <h2 class="text-2xl font-bold text-white mb-4">{{ $category->titulo }}</h2>
                     <div class="relative group carousel-container">
                         <!-- Botón anterior -->
-                        <button class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
-                        <div class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
+                        <button
+                            class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
+                        <div
+                            class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
                             @foreach ($category->peliculas as $pelicula)
-                            @if ($loop->index < 5) 
-                            <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                            @if ($loop->index < 5) <div
+                                class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
                                 <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
                                     @if($pelicula->image)
-                                    <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}" class="w-full h-64 object-cover">
+                                    <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}"
+                                        class="w-full h-64 object-cover">
                                     @endif
                                     <div class="p-4">
-                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $pelicula->title }}</h2>
+                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                                            {{ $pelicula->title }}</h2>
                                     </div>
                                 </a>
-                            </div>
-                            @endif
-                            @endforeach
                         </div>
-                        <!-- Botón siguiente -->
-                        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
+                        @endif
+                        @endforeach
                     </div>
+                    <!-- Botón siguiente -->
+                    <button
+                        class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
                 </div>
-                @endif
-                @endforeach
             </div>
             @endif
-        </main>
-
-        <footer class="py-16 text-center text-sm bg-gray-800 text-white">
-            Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-        </footer>
+            @endforeach
     </div>
-    
+    @endif
+    </main>
+
+    <footer class="py-16 text-center text-sm bg-gray-800 text-white">
+        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+    </footer>
+    </div>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const prevButtons = document.querySelectorAll('.carousel-prev');
