@@ -68,32 +68,44 @@ class PeliculasController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-       //dd($request);
-       $request->validate([
+{
+    $request->validate([
         'title' => 'required|string|max:255',
         'slug' => 'required|string|max:255',
         'content' => 'required|string',
         'category_id' => 'required|integer',
         'description' => 'nullable|string',
         'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'fondo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'posted' => 'required|string|in:not,yes',
-        ]);
-    
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->extension();
-        $image->move(public_path('images'), $imageName);
+    ]);
 
-        $data = $request->all();
-        $data['image'] = $imageName;
+    // Procesar la imagen principal
+    $image = $request->file('image');
+    $imageName = time() . '.' . $image->extension();
+    $image->move(public_path('images'), $imageName);
 
-        Peliculas::create($data);
-
-        // Redireccionar a la lista de posts pagina 41 del pdf
-        return redirect()->route('posts.index')
-                        ->with('success', 'Agregado correctamente.');
-
+    // Procesar la imagen de fondo
+    $fondoName = null;
+    if ($request->hasFile('fondo')) {
+        $fondo = $request->file('fondo');
+        $fondoName = time() . '_fondo.' . $fondo->extension();
+        $fondo->move(public_path('images'), $fondoName);
     }
+
+    $data = $request->all();
+    $data['image'] = $imageName;
+    if ($fondoName) {
+        $data['fondo'] = $fondoName;
+    }
+
+    Peliculas::create($data);
+
+    return redirect()->route('posts.index')
+                    ->with('success', 'Agregado correctamente.');
+}
+
+
 
     /**
      * Display the specified resource.
@@ -116,38 +128,51 @@ class PeliculasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Peliculas $post)
-    {
-        //dd($request);
-       $request->validate([
+    public function update(Request $request, $id)
+{
+    $request->validate([
         'title' => 'required|string|max:255',
         'slug' => 'required|string|max:255',
         'content' => 'required|string',
         'category_id' => 'required|integer',
         'description' => 'nullable|string',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        'fondo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         'posted' => 'required|string|in:not,yes',
-        ]);
+    ]);
 
-        if ($request->hasFile('image')) {
-            // eliminamos la imagen anterior si es que se carga una nueva imagen
-            if ($post->image) {
-                Peliculas::delete('images/' . $post->image);
-            }
-    
-            // guardamos la imagen nueva
-            $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
-            $post->image = $imageName;
-        }
-    
-        // Actualizamos otros campos del post
-        $post->fill($request->except('image'));
-        $post->save();
-    
-        return redirect()->route('posts.index', $post->id)->with('success', 'Pelicula actualizada');
-    
+    $post = Peliculas::findOrFail($id);
+
+    // Procesar la imagen principal
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->extension();
+        $image->move(public_path('images'), $imageName);
+        $post->image = $imageName;
     }
+
+    // Procesar la imagen de fondo
+    if ($request->hasFile('fondo')) {
+        $fondo = $request->file('fondo');
+        $fondoName = time() . '_fondo.' . $fondo->extension();
+        $fondo->move(public_path('images'), $fondoName);
+        $post->fondo = $fondoName;
+    }
+
+    $post->title = $request->title;
+    $post->slug = $request->slug;
+    $post->content = $request->content;
+    $post->category_id = $request->category_id;
+    $post->description = $request->description;
+    $post->posted = $request->posted;
+
+    $post->save();
+
+    return redirect()->route('posts.index')
+                    ->with('success', 'Actualizado correctamente.');
+}
+
+
 
     /**
      * Remove the specified resource from storage.
