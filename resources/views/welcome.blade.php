@@ -22,59 +22,85 @@
         </div>
         <!-- Buscador en el centro -->
         <div class="flex-grow flex justify-center">
-            <form action="{{ route('peliculas.lista') }}" method="GET" class="max-w-md mx-auto">
-                <label for="search" class="sr-only">Buscar películas</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
+                <form action="{{ route('peliculas.lista') }}" method="GET" class="mb-8 w-1/2">
+                    <div class="flex">
+                        <input type="text" name="search" placeholder="¿Qué quieres ver hoy?" class="px-4 py-2 border rounded-l-lg focus:outline-none text-black w-full">
+                        <button type="submit" class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">Buscar</button>
                     </div>
-                    <input type="text" id="search" name="search" placeholder="¿Qué quieres ver hoy?"
-    class="block w-3/4 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                </form>
+            </div>
 
-                    <button type="submit"
-                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-r-lg text-sm px-4 py-2 dark:bg-purple-700 dark:hover:bg-purple-800 dark:focus:ring-purple-400">
-                        Buscar
-                    </button>
+            <div class="flex items-center justify-end lg:col-start-3 lg:justify-end mt-6">
+                <!-- Menú de usuario -->
+                <div class="p-4 rounded-lg shadow-md">
+                    @if (Route::has('login'))
+                    @auth
+                    <div class="hidden sm:flex sm:items-center sm:ms-6">
+                        <x-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                <button
+                                    class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                    @if(Auth::user()->profile_picture)
+                                    <img class="h-8 w-8 rounded-full"
+                                        src="{{ asset('images/profile_pictures/' . Auth::user()->profile_picture) }}"
+                                        alt="{{ Auth::user()->name }}" />
+                                    @else
+                                    <svg class="fill-current h-8 w-8 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-600 dark:text-gray-400"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                    @endif
+                                    <div class="ml-1">{{ Auth::user()->name }}</div>
+                                    <div class="ml-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('dashboard')">
+                                    {{ __('Panel') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('profile.edit')">
+                                    {{ __('Perfil') }}
+                                </x-dropdown-link>
+                                <!-- Authentication -->
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault();
+                                                     this.closest('form').submit();">
+                                        {{ __('Cerrar Sesión') }}
+                                    </x-dropdown-link>
+                                </form>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
+                    @else
+                    <div class="flex space-x-4">
+                        <a href="{{ route('login') }}"
+                        class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">
+                            Ingresar
+                        </a>
+                        @if (Route::has('register'))
+                        <a href="{{ route('register') }}"
+                        class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">
+                            Registrarse
+                        </a>
+                        @endif
+                    </div>
+                    @endauth
+                    @endif
                 </div>
-            </form>
-        </div>
-
-        <!-- Login y registro a la derecha -->
-        @if (Route::has('login'))
-        <div class="flex items-center space-x-4">
-            @auth
-            <a href="{{ url('/dashboard') }}"
-                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
-                <div class="flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="40px"
-                        height="40px">
-                        <path
-                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
-                    {{ Auth::user()->name }}
-                </div>
-            </a>
-            @else
-            <a href="{{ route('login') }}"
-                class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">
-                Ingresar
-            </a>
-            @if (Route::has('register'))
-            <a href="{{ route('register') }}"
-                class="rounded-md px-4 py-2 bg-gradient-to-r from-purple-500 to-cyan-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-purple-600 hover:to-cyan-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 dark:bg-gradient-to-r dark:from-purple-600 dark:to-cyan-600 dark:text-white dark:hover:from-purple-700 dark:hover:to-cyan-700 dark:focus-visible:ring-purple-400">
-                Registrarse
-            </a>
-            @endif
-            @endauth
-        </div>
-        @endif
+            </div>
     </header>
 
-    <div class="pt-28">
+    <div class="pt-36">
         <div id="default-carousel" class="relative w-full max-w-4xl mx-auto" data-carousel="slide">
             <!-- Carousel wrapper -->
             <div class="relative h-48 overflow-hidden rounded-lg md:h-96">
@@ -125,7 +151,7 @@
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 mt-36">
         <!-- Aumentar el margen superior y añadir padding inferior -->
         @if(request()->filled('search'))
         <div class="mb-8">

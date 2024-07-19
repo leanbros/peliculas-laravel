@@ -62,7 +62,7 @@
                                         <span class="text-gray-500 dark:text-gray-400">Sin Imagen</span>
                                         @endif
                                     </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $post->category_id }}</td>
+                                    <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $post->category->titulo }}</td>
                                     <td class="px-4 py-3 whitespace-nowrap text-sm font-medium">
                                         <a href="{{ route('posts.edit', $post->id) }}" class="text-yellow-500 hover:text-yellow-700 inline-flex items-center mr-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="w-6 h-6">

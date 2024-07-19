@@ -33,20 +33,22 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'profile_picture' => ['required', 'string'], // Validar la foto de perfil
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'profile_picture' => $request->profile_picture, // Guardar la foto de perfil
         ]);
 
-        $user->assignRole('user'); // Asignar rol de usuario normal
+        $user->assignRole('normal'); // Asignar rol de usuario normal
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('welcome'));
     }
 }

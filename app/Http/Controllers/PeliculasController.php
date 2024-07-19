@@ -17,7 +17,7 @@ class PeliculasController extends Controller
      */
     public function index()
     {
-        $peliculas = Peliculas::paginate(10);
+        $peliculas = Peliculas::with('category')->paginate(10);
         return view('dashboard', ['data' => $peliculas, 'type' => 'Peliculas']);
     }
 
