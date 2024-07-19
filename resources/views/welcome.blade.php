@@ -151,7 +151,7 @@
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-8 mt-36">
+    <main class="container mx-auto px-4 py-8 mt-16">
         <!-- Aumentar el margen superior y añadir padding inferior -->
         @if(request()->filled('search'))
         <div class="mb-8">

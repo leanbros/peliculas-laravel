@@ -11,7 +11,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h1>Editar categoria</h1>
-                    <form action="{{ route('categories.update', $category->id) }}" method="POST">
+                    <form action="{{ route('categories.update', $category->titulo) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-4">

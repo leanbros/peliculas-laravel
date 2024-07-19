@@ -49,9 +49,9 @@
                                 class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 text-black">>
                                 @foreach($categories as $id => $titulo)
                                 <option value="{{ $id }}" {{ $post->category_id == $id ? 'selected' : '' }}>
-                                    {{ $id }}</option>
+                                    {{ $titulo }}</option>
                                 @endforeach
-                            </select>
+                            </select> 
                         </div>
 
                         <div class="mb-4">

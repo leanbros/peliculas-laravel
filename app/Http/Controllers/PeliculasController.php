@@ -8,6 +8,7 @@ use App\Models\Categorias;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 
 class PeliculasController extends Controller
@@ -177,9 +178,18 @@ class PeliculasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Peliculas $peliculas)
+    public function destroy($id)
     {
-        $peliculas->delete();
-        return redirect()->route('posts.index')->with('success', 'Registro eliminado.');
+        $pelicula = Peliculas::find($id);
+
+        if ($pelicula) {
+            Log::info('Eliminando película con ID: ' . $id);
+            $pelicula->delete();
+            Log::info('Película eliminada con éxito: ' . $id);
+            return redirect()->route('posts.index')->with('success', 'Registro eliminado.');
+        } else {
+            Log::error('Película no encontrada con ID: ' . $id);
+            return redirect()->route('posts.index')->with('error', 'Registro no encontrado.');
+        }
     }
 }
