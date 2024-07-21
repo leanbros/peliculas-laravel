@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SeriesController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +38,26 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('posts', PeliculasController::class);
 Route::resource('categories', CategoryController::class);
+// Rutas para Series
+Route::resource('series', SeriesController::class);
+
+Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
+
+
+// Ruta para la vista de agregar serie
+Route::get('/series/create', [SeriesController::class, 'create'])->name('series.create');
+
+// Ruta para manejar la creación de una serie
+Route::post('/series', [SeriesController::class, 'store'])->name('series.store');
+
+// Ruta para editar una serie
+Route::get('/series/{series}/edit', [SeriesController::class, 'edit'])->name('series.edit');
+
+// Ruta para manejar la actualización de una serie
+Route::put('/series/{series}', [SeriesController::class, 'update'])->name('series.update');
+
+// Ruta para manejar la eliminación de una serie
+Route::delete('/series/{series}', [SeriesController::class, 'destroy'])->name('series.destroy');
 
 //Route::get('/dashboard', [PeliculasController::class, 'index'])->name('dashboard');
 Route::get('/', [PeliculasController::class, 'lista'])->name('welcome');
