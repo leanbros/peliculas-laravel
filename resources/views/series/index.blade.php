@@ -44,7 +44,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         @if($serie->image)
-                                            <img src="{{ asset('storage/'.$serie->image) }}" alt="Imagen de {{ $serie->title }}" class="h-20">
+                                        <img src="{{ asset('images/' . $serie->image) }}" alt="{{ $serie->title }}" class="h-20">
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
