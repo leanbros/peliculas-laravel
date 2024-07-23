@@ -6,9 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\SeriesController;
-use App\Http\Controllers\CapitulosController;
-use App\Http\Controllers\TemporadasController;
+
 
 // Ruta de bienvenida
 Route::get('/', [PeliculasController::class, 'lista'])->name('welcome');
@@ -55,15 +53,11 @@ Route::get('/peliculas/{id}', [PeliculasController::class, 'show'])->name('pelic
 // Rutas para categorías
 Route::resource('categories', CategoryController::class);
 
-// Rutas para series
-Route::resource('series', SeriesController::class)->except(['index', 'show']);
-Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
-Route::get('/series/{series}/edit', [SeriesController::class, 'edit'])->name('series.edit'); 
-Route::get('series/{serie}/edit', [SeriesController::class, 'edit'])->name('series.edit');
 
-Route::post('/series', [SeriesController::class, 'store'])->name('series.store');
-Route::put('series/{series}', [SeriesController::class, 'update'])->name('series.update');
-Route::delete('/series/{series}', [SeriesController::class, 'destroy'])->name('series.destroy');
+
+
+
+
 
 // Rutas para capítulos y temporadas
 Route::resource('capitulos', CapitulosController::class)->except(['index', 'show']);

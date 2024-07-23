@@ -17,14 +17,7 @@
                         class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-block mb-4">
                         Agregar Pelicula
                     </a>
-                    <!-- Botón Agregar Serie -->
-                    <a href="{{ route('series.create') }}"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mb-4 ml-2">
-                        Agregar Serie
-                    </a>
-                    <!-- Botón para visualizar las series -->
-                    <a href="{{ route('series.index') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-4">Visualizar Series</a>
-
+                    
                     <!-- Mensaje de éxito -->
                     @if(session('success'))
                     <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
