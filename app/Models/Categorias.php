@@ -17,4 +17,10 @@ class Categorias extends Model
         {
             return $this->hasMany(Peliculas::class, 'category_id');
         }
+
+        
+        public function series()
+    {
+        return $this->hasMany(Serie::class, 'category_id');
+    }
 }

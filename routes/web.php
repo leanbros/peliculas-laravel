@@ -6,7 +6,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\CommentController;
-
+use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\TemporadaController;
+use App\Http\Controllers\CapituloController;
 
 // Ruta de bienvenida
 Route::get('/', [PeliculasController::class, 'lista'])->name('welcome');
@@ -53,15 +55,27 @@ Route::get('/peliculas/{id}', [PeliculasController::class, 'show'])->name('pelic
 // Rutas para categorías
 Route::resource('categories', CategoryController::class);
 
+// Series   
+Route::resource('series', SeriesController::class);
+Route::post('/series', [SeriesController::class, 'store'])->name('series.store');
+Route::get('/series', [SeriesController::class, 'index'])->name('series.index');
+Route::get('/series/{id}', [SeriesController::class, 'show'])->name('series.show');
+
+
+// Temporadas
+Route::resource('temporadas', TemporadaController::class);
+Route::post('/temporadas', [TemporadaController::class, 'store'])->name('temporadas.store');
+Route::get('temporadas/create', [TemporadaController::class, 'create'])->name('temporadas.create');
+
+// Capítulos
+Route::resource('capitulos', CapituloController::class)->except(['index', 'show']);
+Route::post('/capitulos/multiple', [CapituloController::class, 'storeMultiple'])->name('capitulos.storeMultiple');
+Route::get('/capitulos/{id}', [CapituloController::class, 'show'])->name('capitulos.show');
 
 
 
 
 
-
-// Rutas para capítulos y temporadas
-Route::resource('capitulos', CapitulosController::class)->except(['index', 'show']);
-Route::resource('temporadas', TemporadasController::class)->except(['index', 'show']);
 
 // Ruta de categorías con autenticación y verificación
 Route::get('/Categorias', function () {

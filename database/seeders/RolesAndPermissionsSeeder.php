@@ -12,7 +12,7 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run()
     {
         // Crear roles si no existen
-        $roleAdmin = Role::firstOrCreate(['name' => 'admin']);
+        $roleAdmin = Role::firstOrCreate(['name' => 'administrador']);
         $roleUser = Role::firstOrCreate(['name' => 'user']);
         $roleNormal = Role::firstOrCreate(['name' => 'normal']);
 

@@ -104,123 +104,126 @@
             </div>
 
         </header>
+        <div class="pt-36">
 
-        <main class="mt-28 container mx-auto px-6">
-            <h1 class="text-3xl font-bold mb-4 text-white">{{ $pelicula->title }}</h1>
-            <h3 class="text-white">Calificacion: {{ number_format($pelicula->averageRating(), 2) }}</h3>
-            <div class="flex items-center">
-                @for ($i = 1; $i <= 5; $i++) @if ($i <=floor($pelicula->averageRating()))
-                    <!-- Estrella llena -->
-                    <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M9.049 2.927C9.337 2.036 10.663 2.036 10.951 2.927L12.084 6.518L15.967 7.03C16.919 7.155 17.261 8.28 16.541 8.879L13.812 11.137L14.625 14.901C14.809 15.832 13.774 16.538 13.004 15.997L9.999 13.982L6.995 15.997C6.225 16.538 5.19 15.832 5.374 14.901L6.187 11.137L3.458 8.879C2.738 8.28 3.08 7.155 4.032 7.03L7.915 6.518L9.049 2.927Z" />
-                    </svg>
-                    @elseif ($i - 0.5 <= $pelicula->averageRating())
-                        <!-- Media estrella -->
+            <main class="mt-28 container mx-auto px-6">
+                <h1 class="text-3xl font-bold mb-4 text-white">{{ $pelicula->title }}</h1>
+                <h3 class="text-white">Calificacion: {{ number_format($pelicula->averageRating(), 2) }}</h3>
+                <div class="flex items-center">
+                    @for ($i = 1; $i <= 5; $i++) @if ($i <=floor($pelicula->averageRating()))
+                        <!-- Estrella llena -->
                         <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"
                             xmlns="http://www.w3.org/2000/svg">
-                            <defs>
-                                <linearGradient id="half">
-                                    <stop offset="50%" stop-color="currentColor" />
-                                    <stop offset="50%" stop-color="transparent" />
-                                </linearGradient>
-                            </defs>
-                            <path fill="url(#half)"
+                            <path
                                 d="M9.049 2.927C9.337 2.036 10.663 2.036 10.951 2.927L12.084 6.518L15.967 7.03C16.919 7.155 17.261 8.28 16.541 8.879L13.812 11.137L14.625 14.901C14.809 15.832 13.774 16.538 13.004 15.997L9.999 13.982L6.995 15.997C6.225 16.538 5.19 15.832 5.374 14.901L6.187 11.137L3.458 8.879C2.738 8.28 3.08 7.155 4.032 7.03L7.915 6.518L9.049 2.927Z" />
                         </svg>
-                        @else
-                        <!-- Estrella vacía -->
-                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11.049 2.927C11.337 2.036 12.663 2.036 12.951 2.927L14.084 6.518L17.967 7.03C18.919 7.155 19.261 8.28 18.541 8.879L15.812 11.137L16.625 14.901C16.809 15.832 15.774 16.538 15.004 15.997L11.999 13.982L8.995 15.997C8.225 16.538 7.19 15.832 7.374 14.901L8.187 11.137L5.458 8.879C4.738 8.28 5.08 7.155 6.032 7.03L9.915 6.518L11.049 2.927Z" />
-                        </svg>
-                        @endif
-                        @endfor
-            </div>
-            <iframe src="{{ $pelicula->slug }}" sandbox="allow-same-origin allow-scripts" width="80%" height="600px"
-                scrolling="no" frameborder="0" allowfullscreen="true"></iframe>
-
-            <div class="mt-6 p-4 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md mx-auto">
-                <!-- Calificación de Película -->
-                <div class="rating-section mb-6">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-200 dark:text-gray-200">Calificación de la película
-                    </h3>
-                    <form action="{{ route('rate') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="peliculas_id" value="{{ $pelicula->id }}">
-
-                        <div class="rating">
-                            @for($i = 5; $i >= 1; $i--)
-                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" />
-                            <label for="star{{ $i }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 star-icon" viewBox="0 0 24 24"
-                                    fill="currentColor">
-                                    <path
-                                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
-                                </svg>
-                            </label>
+                        @elseif ($i - 0.5 <= $pelicula->averageRating())
+                            <!-- Media estrella -->
+                            <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="half">
+                                        <stop offset="50%" stop-color="currentColor" />
+                                        <stop offset="50%" stop-color="transparent" />
+                                    </linearGradient>
+                                </defs>
+                                <path fill="url(#half)"
+                                    d="M9.049 2.927C9.337 2.036 10.663 2.036 10.951 2.927L12.084 6.518L15.967 7.03C16.919 7.155 17.261 8.28 16.541 8.879L13.812 11.137L14.625 14.901C14.809 15.832 13.774 16.538 13.004 15.997L9.999 13.982L6.995 15.997C6.225 16.538 5.19 15.832 5.374 14.901L6.187 11.137L3.458 8.879C2.738 8.28 3.08 7.155 4.032 7.03L7.915 6.518L9.049 2.927Z" />
+                            </svg>
+                            @else
+                            <!-- Estrella vacía -->
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11.049 2.927C11.337 2.036 12.663 2.036 12.951 2.927L14.084 6.518L17.967 7.03C18.919 7.155 19.261 8.28 18.541 8.879L15.812 11.137L16.625 14.901C16.809 15.832 15.774 16.538 15.004 15.997L11.999 13.982L8.995 15.997C8.225 16.538 7.19 15.832 7.374 14.901L8.187 11.137L5.458 8.879C4.738 8.28 5.08 7.155 6.032 7.03L9.915 6.518L11.049 2.927Z" />
+                            </svg>
+                            @endif
                             @endfor
-                        </div>
-                        <br>
-                        <button type="submit"
-                            class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">Calificar</button>
-                    </form>
                 </div>
+                <iframe src="{{ $pelicula->slug }}" sandbox="allow-same-origin allow-scripts" width="80%" height="600px"
+                    scrolling="no" frameborder="0" allowfullscreen="true"></iframe>
 
-                <!-- Agregar Comentario -->
-                <div class="comment-section mb-4">
-                    <h3 class="text-xl font-semibold mb-4 text-white dark:text-gray-200">Agregar comentario:</h3>
-                    <form action="{{ route('comments.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="peliculas_id" value="{{ $pelicula->id }}">
-                        <div class="form-group mb-4">
-                            <textarea name="content"
-                                class="form-control p-3 border rounded-lg w-full text-gray-900 dark:bg-gray-700 dark:text-gray-300"
-                                rows="3" placeholder="Escribe tu comentario aquí..." required></textarea>
+                <div class="mt-6 p-4 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-md mx-auto">
+                    <!-- Calificación de Película -->
+                    <div class="rating-section mb-6">
+                        <h3 class="text-xl font-semibold mb-4 text-gray-200 dark:text-gray-200">Calificación de la
+                            película
+                        </h3>
+                        <form action="{{ route('rate') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="peliculas_id" value="{{ $pelicula->id }}">
+
+                            <div class="rating">
+                                @for($i = 5; $i >= 1; $i--)
+                                <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}" />
+                                <label for="star{{ $i }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 star-icon"
+                                        viewBox="0 0 24 24" fill="currentColor">
+                                        <path
+                                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                                    </svg>
+                                </label>
+                                @endfor
+                            </div>
+                            <br>
+                            <button type="submit"
+                                class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">Calificar</button>
+                        </form>
+                    </div>
+
+                    <!-- Agregar Comentario -->
+                    <div class="comment-section mb-4">
+                        <h3 class="text-xl font-semibold mb-4 text-white dark:text-gray-200">Agregar comentario:</h3>
+                        <form action="{{ route('comments.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="peliculas_id" value="{{ $pelicula->id }}">
+                            <div class="form-group mb-4">
+                                <textarea name="content"
+                                    class="form-control p-3 border rounded-lg w-full text-gray-900 dark:bg-gray-700 dark:text-gray-300"
+                                    rows="3" placeholder="Escribe tu comentario aquí..." required></textarea>
+                            </div>
+                            <button type="submit"
+                                class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">Enviar
+                                comentario</button>
+                        </form>
+                    </div>
+
+                    <!-- Mostrar Comentarios -->
+                    <div class="comments-list w-full bg-gray-900 dark:bg-gray-800 rounded-lg shadow-md">
+                        <div class="p-4">
+                            <h5 class="text-xl font-bold text-white dark:text-white mb-4">Últimos comentarios</h5>
+                            <ul role="list" class="divide-y text-white dark:divide-gray-700">
+                                @foreach($pelicula->comments as $comment)
+                                <li class="py-3 sm:py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                                fill="currentColor" class="w-10 h-10 text-gray-500 dark:text-gray-400">
+                                                <path fill-rule="evenodd"
+                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7 9.75c0-.41.34-.75.75-.75h8.5c.41 0 .75.34.75.75s-.34.75-.75.75h-8.5c-.41 0-.75-.34-.75-.75zm0 4c0-.41.34-.75.75-.75h5.5c.41 0 .75.34.75.75s-.34.75-.75.75h-5.5c-.41 0-.75-.34-.75-.75zm4 4c0-.41.34-.75.75-.75h4.5c.41 0 .75.34.75.75s-.34.75-.75.75h-4.5c-.41 0-.75-.34-.75-.75z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-white truncate dark:text-white">
+                                                {{ $comment->user->name }}
+                                            </p>
+                                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                {{ $comment->content }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <button type="submit"
-                            class="rounded-md px-4 py-2 bg-gradient-to-r from-cyan-500 to-purple-500 text-white shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:bg-gradient-to-r hover:from-cyan-600 hover:to-purple-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 dark:bg-gradient-to-r dark:from-cyan-600 dark:to-purple-600 dark:text-white dark:hover:from-cyan-700 dark:hover:to-purple-700 dark:focus-visible:ring-cyan-400">Enviar
-                            comentario</button>
-                    </form>
-                </div>
-
-                <!-- Mostrar Comentarios -->
-                <div class="comments-list w-full bg-gray-900 dark:bg-gray-800 rounded-lg shadow-md">
-                    <div class="p-4">
-                        <h5 class="text-xl font-bold text-white dark:text-white mb-4">Últimos comentarios</h5>
-                        <ul role="list" class="divide-y text-white dark:divide-gray-700">
-                            @foreach($pelicula->comments as $comment)
-                            <li class="py-3 sm:py-4">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                                            class="w-10 h-10 text-gray-500 dark:text-gray-400">
-                                            <path fill-rule="evenodd"
-                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7 9.75c0-.41.34-.75.75-.75h8.5c.41 0 .75.34.75.75s-.34.75-.75.75h-8.5c-.41 0-.75-.34-.75-.75zm0 4c0-.41.34-.75.75-.75h5.5c.41 0 .75.34.75.75s-.34.75-.75.75h-5.5c-.41 0-.75-.34-.75-.75zm4 4c0-.41.34-.75.75-.75h4.5c.41 0 .75.34.75.75s-.34.75-.75.75h-4.5c-.41 0-.75-.34-.75-.75z"
-                                                clip-rule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div class="ml-3">
-                                        <p class="text-sm font-medium text-white truncate dark:text-white">
-                                            {{ $comment->user->name }}
-                                        </p>
-                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                            {{ $comment->content }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </li>
-                            @endforeach
-                        </ul>
                     </div>
                 </div>
-            </div>
-        </main>
-        <footer class="py-16 text-center text-sm text-white dark:text-white/70">
-            Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-        </footer>
+            </main>
+            <footer class="py-16 text-center text-sm text-white dark:text-white/70">
+                Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+            </footer>
+        </div>
     </div>
 
     <style>
