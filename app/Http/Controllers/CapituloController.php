@@ -40,8 +40,10 @@ class CapituloController extends Controller
 
 public function show($id)
 {
-    $capitulo = Capitulo::with('temporada')->findOrFail($id);
-    return view('capitulos.show', compact('capitulo'));
+    $capitulo = Capitulo::with('temporada.serie.temporadas.capitulos')->findOrFail($id);
+    $temporadas = $capitulo->temporada->serie->temporadas;
+
+    return view('capitulos.show', compact('capitulo', 'temporadas'));
 }
 
     public function edit(Capitulo $capitulo)
@@ -50,26 +52,35 @@ public function show($id)
     }
 
     public function update(Request $request, Capitulo $capitulo)
-    {
-        $request->validate([
-            'titulo' => 'required|string|max:500',
-            'numero_capitulo' => 'required|string|max:500',
-            'url' => 'required|string|max:500',
-            'temporada_id' => 'required|exists:temporadas,id',
-        ]);
+{
+    $request->validate([
+        'titulo' => 'required|string|max:500',
+        'numero_capitulo' => 'required|string|max:500',
+        'url' => 'required|url|max:500', // Validar que la URL es válida
+    ]);
 
-        $capitulo->update($request->all());
+    // Actualizar solo los campos necesarios
+    $capitulo->update([
+        'titulo' => $request->input('titulo'),
+        'numero_capitulo' => $request->input('numero_capitulo'),
+        'url' => $request->input('url'),
+    ]);
 
-        return redirect()->route('series.edit', $capitulo->temporada->serie_id)->with('success', 'Capítulo actualizado con éxito.');
-    }
+    return redirect()->route('series.edit', $capitulo->temporada->serie_id)
+                     ->with('success', 'Capítulo actualizado con éxito.');
+}
 
-    public function destroy(Capitulo $capitulo)
-    {
-        $serie_id = $capitulo->temporada->serie_id;
-        $capitulo->delete();
 
-        return redirect()->route('series.edit', $serie_id)->with('success', 'Capítulo eliminado con éxito.');
-    }
+
+public function destroy(Capitulo $capitulo)
+{
+    $serie_id = $capitulo->temporada->serie_id;
+    $capitulo->delete();
+
+    return redirect()->route('series.edit', $serie_id)
+                     ->with('success', 'Capítulo eliminado con éxito.');
+}
+
 
     public function storeMultiple(Request $request)
     {

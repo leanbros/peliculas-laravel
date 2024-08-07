@@ -14,6 +14,7 @@
                         class="space-y-4">
                         @csrf
                         @method('PUT')
+                        <!-- Campos de edición de la serie -->
                         <div>
                             <label for="nombre_serie" class="block text-sm font-medium text-gray-700">Nombre de la
                                 Serie</label>
@@ -91,16 +92,34 @@
                             Agregar Temporada
                         </button>
                     </form>
-                    @if($errors->any())
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                        <strong class="font-bold">¡Error!</strong>
-                        <ul class="list-disc ml-5 mt-1">
-                            @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
+
+                    <hr class="my-6">
+
+                    <h2 class="text-xl font-bold mb-4">Editar Temporadas Existentes</h2>
+                    @foreach($serie->temporadas as $temporada)
+                    <form action="{{ route('temporadas.update', $temporada->id) }}" method="POST" class="space-y-4">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <label for="nombre_temporada" class="block text-sm font-medium text-gray-700">Nombre de la
+                                Temporada</label>
+                            <input type="text" name="nombre_temporada"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                value="{{ $temporada->nombre_temporada }}">
+                        </div>
+                        <div>
+                            <label for="fecha_de_lanzamiento" class="block text-sm font-medium text-gray-700">Fecha de
+                                Lanzamiento</label>
+                            <input type="text" name="fecha_de_lanzamiento"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                value="{{ $temporada->fecha_de_lanzamiento }}">
+                        </div>
+                        <button type="submit"
+                            class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Guardar Temporada
+                        </button>
+                    </form>
+                    @endforeach
 
                     <hr class="my-6">
 
@@ -140,37 +159,118 @@
                         </div>
                         <button type="button" id="add-capitulo"
                             class="mt-2 inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            Agregar Otro Capítulo
+                            Agregar Capítulo
                         </button>
                         <button type="submit"
                             class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Agregar Capítulos
+                            Guardar Capítulos
                         </button>
                     </form>
 
+                    <hr class="my-6">
 
-                    <script>
-                    document.getElementById('add-capitulo').addEventListener('click', function() {
-                        const container = document.getElementById('capitulos-container');
-                        const newGroup = document.querySelector('.capitulo-group').cloneNode(true);
-                        newGroup.querySelectorAll('input').forEach(input => input.value = '');
-                        container.appendChild(newGroup);
-                    });
-                    </script>
+                    <h2 class="text-xl font-bold mb-4">Editar Capítulos Existentes</h2>
 
-                    <style>
-                    select {
-                        background-color: white;
-                        color: black;
-                    }
+                    @if(session('success'))
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                        <strong class="font-bold">{{ session('success') }}</strong>
+                    </div>
+                    @endif
 
-                    .dark-mode select {
-                        background-color: #2d2d2d;
-                        color: #ffffff;
-                    }
-                    </style>
+                    @foreach($serie->temporadas as $temporada)
+                    <h3 class="text-lg font-semibold">{{ $temporada->nombre_temporada }}</h3>
+                    @foreach($temporada->capitulos as $capitulo)
+                    <!-- Formulario para editar el capítulo -->
+                    <form action="{{ route('capitulos.update', $capitulo->id) }}" method="POST" class="space-y-4 mb-6">
+                        @csrf
+                        @method('PATCH')
+                        <div class="capitulo-group flex space-x-4">
+                            <div>
+                                <label for="titulo-{{ $capitulo->id }}"
+                                    class="block text-sm font-medium text-gray-700">Título del Capítulo</label>
+                                <input type="text" name="titulo" id="titulo-{{ $capitulo->id }}"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    value="{{ $capitulo->titulo }}" required>
+                            </div>
+                            <div>
+                                <label for="numero_capitulo-{{ $capitulo->id }}"
+                                    class="block text-sm font-medium text-gray-700">Número del Capítulo</label>
+                                <input type="text" name="numero_capitulo" id="numero_capitulo-{{ $capitulo->id }}"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    value="{{ $capitulo->numero_capitulo }}" required>
+                            </div>
+                            <div>
+                                <label for="url-{{ $capitulo->id }}" class="block text-sm font-medium text-gray-700">URL
+                                    del Capítulo</label>
+                                <input type="text" name="url" id="url-{{ $capitulo->id }}"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                                    value="{{ $capitulo->url }}" required>
+                            </div>
+                        </div>
+                        <button type="submit"
+                            class="mt-2 inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Guardar Capítulo
+                        </button>
+                    </form>
+
+                    <!-- Formulario para eliminar el capítulo -->
+                    <form action="{{ route('capitulos.destroy', $capitulo->id) }}" method="POST"
+                        class="mt-4 inline-block">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Eliminar Capítulo
+                        </button>
+                    </form>
+                    @endforeach
+                    @endforeach
+
+
+
+
                 </div>
             </div>
         </div>
     </div>
 </x-app-layout>
+
+
+<script>
+document.getElementById('add-capitulo').addEventListener('click', function() {
+    var container = document.getElementById('capitulos-container');
+    var newGroup = document.createElement('div');
+    newGroup.classList.add('capitulo-group', 'flex', 'space-x-4');
+    newGroup.innerHTML = `
+        <div>
+            <label for="titulo" class="block text-sm font-medium text-gray-700">Título del Capítulo</label>
+            <input type="text" name="titulo[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        </div>
+        <div>
+            <label for="numero_capitulo" class="block text-sm font-medium text-gray-700">Número del Capítulo</label>
+            <input type="text" name="numero_capitulo[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        </div>
+        <div>
+            <label for="url" class="block text-sm font-medium text-gray-700">URL del Capítulo</label>
+            <input type="text" name="url[]" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
+        </div>
+    `;
+    container.appendChild(newGroup);
+});
+</script>
+
+<style>
+select {
+    background-color: white;
+    color: black;
+}
+
+.dark-mode select {
+    background-color: #2d2d2d;
+    color: #ffffff;
+}
+</style>
+</div>
+</div>
+</div>
+</div>

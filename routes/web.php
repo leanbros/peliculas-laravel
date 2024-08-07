@@ -71,6 +71,9 @@ Route::get('temporadas/create', [TemporadaController::class, 'create'])->name('t
 Route::resource('capitulos', CapituloController::class)->except(['index', 'show']);
 Route::post('/capitulos/multiple', [CapituloController::class, 'storeMultiple'])->name('capitulos.storeMultiple');
 Route::get('/capitulos/{id}', [CapituloController::class, 'show'])->name('capitulos.show');
+Route::patch('/capitulos/{id}', [CapituloController::class, 'update'])->name('capitulos.update');
+Route::delete('/capitulos/{id}', [CapituloController::class, 'destroy'])->name('capitulos.destroy');
+
 
 
 

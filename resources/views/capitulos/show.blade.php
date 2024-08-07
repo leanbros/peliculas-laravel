@@ -108,7 +108,9 @@
 
         <div class="pt-36">
             <div class="container mx-auto py-8">
-                <h1 class="text-4xl font-bold mb-4 text-white"> {{ $capitulo->titulo }}</h1>
+                <h1 class="text-4xl font-bold mb-4 text-white">
+                    {{ $capitulo->temporada->serie->nombre_serie }} - {{ $capitulo->titulo }}
+                </h1>
 
                 <div class="relative overflow-hidden rounded-lg shadow-lg bg-gray-800">
                     <iframe src="{{ $capitulo->url }}" sandbox="allow-same-origin allow-scripts" width="100%"
@@ -118,8 +120,72 @@
                 <div class="mt-4">
                     <p class="text-lg">{{ $capitulo->descripcion }}</p>
                 </div>
+
+                <div class="mt-8">
+                    <label for="temporada-select" class="block text-sm font-medium text-white">Seleccionar
+                        Temporada:</label>
+                    <select id="temporada-select"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100">
+                        @foreach($temporadas as $temporada)
+                        <option value="{{ $temporada->id }}">{{ $temporada->nombre_temporada }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div id="capitulos-container" class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Aquí se insertarán los capítulos mediante JavaScript -->
+                </div>
             </div>
         </div>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const temporadaSelect = document.getElementById('temporada-select');
+            const capitulosContainer = document.getElementById('capitulos-container');
+            const temporadas = @json($temporadas);
+
+            function cargarCapitulos(temporadaId) {
+                const temporada = temporadas.find(t => t.id == temporadaId);
+                capitulosContainer.innerHTML = '';
+
+                if (temporada && temporada.capitulos) {
+                    temporada.capitulos.forEach(capitulo => {
+                        const capituloDiv = document.createElement('div');
+                        capituloDiv.classList.add('p-4', 'bg-gray-800', 'rounded-lg', 'shadow-md',
+                            'text-white');
+                        capituloDiv.innerHTML = `
+                        <h3 class="text-xl font-bold mb-2">${capitulo.titulo}</h3>
+                        <p class="text-sm mb-2">Capítulo ${capitulo.numero_capitulo}</p>
+                        <a href="/capitulos/${capitulo.id}" class="text-blue-500 underline">Ver Capítulo</a>
+                    `;
+                        capitulosContainer.appendChild(capituloDiv);
+                    });
+                }
+            }
+
+            temporadaSelect.addEventListener('change', function() {
+                cargarCapitulos(this.value);
+            });
+
+            // Cargar los capítulos de la primera temporada al cargar la página
+            if (temporadas.length > 0) {
+                cargarCapitulos(temporadas[0].id);
+            }
+        });
+        </script>
+
+        <style>
+        select {
+            background-color: white;
+            color: black;
+        }
+
+        .dark-mode select {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        </style>
+
 </body>
 
 </html>
