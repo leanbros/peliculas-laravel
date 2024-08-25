@@ -9,7 +9,7 @@
                     <div class="md:flex md:flex-row">
                         <div class="mx-auto mb-6 flex w-36 items-center justify-center md:mx-0 md:w-96 lg:mb-0">
                             @if ($serie->imagen)
-                                <img src="{{ asset('storage/series_images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="h-auto max-w-sm rounded-lg shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30">
+                                <img src="{{ asset('images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="h-auto max-w-sm rounded-lg shadow-none transition-shadow duration-300 ease-in-out hover:shadow-lg hover:shadow-black/30">
                             @endif
                             
                         </div>

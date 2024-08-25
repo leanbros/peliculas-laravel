@@ -17,5 +17,9 @@ class Capitulo extends Model
     {
         return $this->belongsTo(Temporada::class, 'temporada_id');
     }
+    public function capituloComments()
+    {
+        return $this->hasMany(CapituloComment::class);
+    }
 }
 

@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
+use App\Models\Serie;
 
 
 class PeliculasController extends Controller
@@ -23,37 +24,36 @@ class PeliculasController extends Controller
     }
 
     public function lista(Request $request)
-    {
-        $query = Peliculas::query();
+{
+    $queryPeliculas = Peliculas::query();
+    $querySeries = Serie::query(); // Asegúrate de tener el modelo correcto para Series
 
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where('title', 'LIKE', "%{$search}%")
-                ->orWhereHas('category', function($q) use ($search) {
-                    $q->where('titulo', 'LIKE', "%{$search}%");
-                });
-        }
+    if ($request->filled('search')) {
+        $search = $request->input('search');
 
-        $peliculas = $query->get();
+        // Buscar en películas
+        $queryPeliculas->where('title', 'LIKE', "%{$search}%")
+            ->orWhereHas('category', function($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%");
+            });
 
-        if ($request->filled('search')) {
-            $categories = Categorias::whereHas('peliculas', function($q) use ($search) {
-                $q->where('title', 'LIKE', "%{$search}%")
-                  ->orWhereHas('category', function($q) use ($search) {
-                      $q->where('titulo', 'LIKE', "%{$search}%");
-                  });
-            })->with(['peliculas' => function($q) use ($search) {
-                $q->where('title', 'LIKE', "%{$search}%")
-                  ->orWhereHas('category', function($q) use ($search) {
-                      $q->where('titulo', 'LIKE', "%{$search}%");
-                  });
-            }])->get();
-        } else {
-            $categories = Categorias::with('peliculas')->get();
-        }
-    
-        return view('welcome', compact('peliculas', 'categories'));
+        // Buscar en series
+        $querySeries->where('nombre_serie', 'LIKE', "%{$search}%")
+            ->orWhereHas('category', function($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%");
+            });
     }
+
+    $peliculas = $queryPeliculas->get();
+    $series = $querySeries->get();
+
+    $categories = Categorias::with(['peliculas', 'series'])->get(); // Incluye series aquí si es necesario
+
+    return view('welcome', compact('peliculas', 'series', 'categories'));
+}
+
+
+
 
     /**
      * Show the form for creating a new resource.

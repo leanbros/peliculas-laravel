@@ -70,7 +70,7 @@
                             <input type="file" class="form-input w-full border-gray-300 rounded-md text-black"
                                 name="fondo" id="fondo">
                         </div>
-
+ 
 
 
                         <div class="mb-4">

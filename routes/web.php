@@ -9,6 +9,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\TemporadaController;
 use App\Http\Controllers\CapituloController;
+use App\Http\Controllers\CapituloCommentController;
+use App\Http\Controllers\SearchController;
 
 // Ruta de bienvenida
 Route::get('/', [PeliculasController::class, 'lista'])->name('welcome');
@@ -41,10 +43,15 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/calificaciones/{rating}', [RatingController::class, 'destroy'])->name('calificaciones.destroy');
     Route::patch('/calificaciones/{id}', [RatingController::class, 'update'])->name('calificaciones.update');
 
-    // Rutas para comentarios
+    // Rutas para comentarios peliculas
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
-    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
     Route::patch('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+
+    //ruta comentarios cpitulos
+    Route::post('/capitulo-comments', [CapituloCommentController::class, 'store'])->name('capituloComments.store');
+    Route::delete('/capitulo-comments/{capituloComment}', [CapituloCommentController::class, 'destroy'])->name('capituloComments.destroy');
+    Route::put('/capitulo-comments/{capituloComment}', [CapituloCommentController::class, 'update'])->name('capituloComments.update');
 });
 
 // Rutas de películas
@@ -73,6 +80,10 @@ Route::post('/capitulos/multiple', [CapituloController::class, 'storeMultiple'])
 Route::get('/capitulos/{id}', [CapituloController::class, 'show'])->name('capitulos.show');
 Route::patch('/capitulos/{id}', [CapituloController::class, 'update'])->name('capitulos.update');
 Route::delete('/capitulos/{id}', [CapituloController::class, 'destroy'])->name('capitulos.destroy');
+
+
+//Buscador
+Route::get('/busqueda', [SearchController::class, 'search'])->name('busqueda.resultado');
 
 
 

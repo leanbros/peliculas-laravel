@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="imagen" class="block text-gray-700 dark:text-gray-300">Imagen</label>
+                            <label for="" class="block text-gray-700 dark:text-gray-300">Imagen</label>
                             <input type="file" id="imagen" name="imagen"
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50">
                         </div>

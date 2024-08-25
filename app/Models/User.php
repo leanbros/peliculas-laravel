@@ -57,5 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rating::class);
     }
+    public function capituloComments()
+    {
+        return $this->hasMany(CapituloComment::class);
+    }
 
 }

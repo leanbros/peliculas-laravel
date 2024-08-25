@@ -104,7 +104,7 @@
             </div>
 
         </header>
-        <div class="pt-36">
+        <div class="pt-16">
 
             <main class="mt-28 container mx-auto px-6">
                 <h1 class="text-3xl font-bold mb-4 text-white">{{ $pelicula->title }}</h1>
@@ -187,43 +187,56 @@
                                 comentario</button>
                         </form>
                     </div>
+                </div>
 
-                    <!-- Mostrar Comentarios -->
-                    <div class="comments-list w-full bg-gray-900 dark:bg-gray-800 rounded-lg shadow-md">
-                        <div class="p-4">
-                            <h5 class="text-xl font-bold text-white dark:text-white mb-4">Últimos comentarios</h5>
-                            <ul role="list" class="divide-y text-white dark:divide-gray-700">
-                                @foreach($pelicula->comments as $comment)
-                                <li class="py-3 sm:py-4">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                fill="currentColor" class="w-10 h-10 text-gray-500 dark:text-gray-400">
-                                                <path fill-rule="evenodd"
-                                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7 9.75c0-.41.34-.75.75-.75h8.5c.41 0 .75.34.75.75s-.34.75-.75.75h-8.5c-.41 0-.75-.34-.75-.75zm0 4c0-.41.34-.75.75-.75h5.5c.41 0 .75.34.75.75s-.34.75-.75.75h-5.5c-.41 0-.75-.34-.75-.75zm4 4c0-.41.34-.75.75-.75h4.5c.41 0 .75.34.75.75s-.34.75-.75.75h-4.5c-.41 0-.75-.34-.75-.75z"
-                                                    clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-white truncate dark:text-white">
-                                                {{ $comment->user->name }}
-                                            </p>
-                                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                                {{ $comment->content }}
-                                            </p>
-                                        </div>
+                <!-- Mostrar Comentarios -->
+                <div class="comments-list w-full bg-gray-900 dark:bg-gray-800 rounded-lg shadow-md">
+                    <div class="p-4">
+                        <h5 class="text-xl font-bold text-white dark:text-white mb-4">Últimos comentarios</h5>
+                        <ul role="list" class="divide-y text-white dark:divide-gray-700">
+                            @foreach($pelicula->comments as $comment)
+                            <li class="py-3 sm:py-4">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                            class="w-10 h-10 text-gray-500 dark:text-gray-400">
+                                            <path fill-rule="evenodd"
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM7 9.75c0-.41.34-.75.75-.75h8.5c.41 0 .75.34.75.75s-.34.75-.75.75h-8.5c-.41 0-.75-.34-.75-.75zm0 4c0-.41.34-.75.75-.75h5.5c.41 0 .75.34.75.75s-.34.75-.75.75h-5.5c-.41 0-.75-.34-.75-.75zm4 4c0-.41.34-.75.75-.75h4.5c.41 0 .75.34.75.75s-.34.75-.75.75h-4.5c-.41 0-.75-.34-.75-.75z"
+                                                clip-rule="evenodd" />
+                                        </svg>
                                     </div>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
+                                    <div class="ml-3 flex-1">
+                                        <p class="text-sm font-medium text-white truncate dark:text-white">
+                                            {{ $comment->user->name }}
+                                        </p>
+                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                            {{ $comment->content }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @if(Auth::check() && Auth::id() === $comment->user_id)
+                                <div class="mt-2 flex justify-end">
+                                    <form action="{{ route('comment.destroy', $comment->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:text-red-700">Eliminar</button>
+                                    </form>
+                                </div>
+                                @endif
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
-            </main>
-            <footer class="py-16 text-center text-sm text-white dark:text-white/70">
-                Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-            </footer>
+
         </div>
+
+
+        </main>
+        <footer class="py-16 text-center text-sm text-white dark:text-white/70">
+            Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+        </footer>
+    </div>
     </div>
 
     <style>

@@ -39,7 +39,7 @@
                             <input type="file" name="imagen"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
                             @if($serie->imagen)
-                            <img src="{{ asset('storage/series_images/' . $serie->imagen) }}"
+                            <img src="{{ asset('images/' . $serie->imagen) }}"
                                 alt="{{ $serie->nombre_serie }}" class="w-24 h-16 object-cover">
                             @endif
                         </div>

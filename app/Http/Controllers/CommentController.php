@@ -38,25 +38,35 @@ class CommentController extends Controller
 
         return back()->with('success', 'Comment added successfully');
     }
-    public function destroy(Comment $comment)
+
+    public function destroy(Request $request, $id)
     {
+        // Encuentra el comentario a eliminar
+        $comment = Comment::findOrFail($id);
+        
+        // Verifica si el usuario es el propietario del comentario
+        if (Auth::id() !== $comment->user_id) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Elimina el comentario
         $comment->delete();
-        return redirect()->route('dashboard')->with('success', 'Comentario eliminado.');
+
+        // Redirige de vuelta a la misma página
+        return back()->with('success', 'Comentario eliminado exitosamente.');
     }
 
     public function update(Request $request, $id)
     {
-
-        //dd($comment);
         $request->validate([
             'comment' => 'required|string|max:1000',
         ]);
+
         $comentario = Comment::findOrFail($id);
 
         $comentario->content = $request->comment;
         $comentario->save();
 
         return redirect()->back()->with('success', 'Comentario actualizado correctamente');
-
     }
 }

@@ -22,7 +22,7 @@
                         role="alert">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
-                    @endif
+                    @endif 
 
                     <!-- Tabla de series -->
                     <div class="overflow-x-auto">
@@ -87,10 +87,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         @if($serie->imagen)
-                                        <img src="{{ asset('storage/series_images/' . $serie->imagen) }}"
-                                            alt="{{ $serie->nombre_serie }}" class="w-24 h-16 object-cover">
+                                        <img src="{{ asset('images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="w-24 h-16 object-cover">
                                         @endif
-                                    </td>
+                                    </td> 
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {{ $serie->category->titulo }}
                                     </td>

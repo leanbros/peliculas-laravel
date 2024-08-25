@@ -40,16 +40,31 @@ class CapituloController extends Controller
 
 public function show($id)
 {
-    $capitulo = Capitulo::with('temporada.serie.temporadas.capitulos')->findOrFail($id);
-    $temporadas = $capitulo->temporada->serie->temporadas;
+    
+    $capitulo = Capitulo::with('temporada.serie')->findOrFail($id);
+    $temporada = $capitulo->temporada;
+    
+    // Obtener todas las temporadas de la serie
+    $temporadas = Temporada::where('serie_id', $temporada->serie_id)->with('capitulos')->get();
 
-    return view('capitulos.show', compact('capitulo', 'temporadas'));
+    // Obtener el capítulo anterior
+    $capituloAnterior = Capitulo::where('temporada_id', $temporada->id)
+                                ->where('numero_capitulo', '<', $capitulo->numero_capitulo)
+                                ->orderBy('numero_capitulo', 'desc')
+                                ->first();
+    
+    // Obtener el capítulo siguiente
+    $capituloSiguiente = Capitulo::where('temporada_id', $temporada->id)
+                                ->where('numero_capitulo', '>', $capitulo->numero_capitulo)
+                                ->orderBy('numero_capitulo', 'asc')
+                                ->first();
+    
+    return view('capitulos.show', compact('capitulo', 'capituloAnterior', 'capituloSiguiente', 'temporadas'));
+
+    $capitulo = Capitulo::with('comments.user')->findOrFail($id);
+    return view('capitulos.show', compact('capitulo'));
 }
 
-    public function edit(Capitulo $capitulo)
-    {
-        return view('capitulos.edit', compact('capitulo'));
-    }
 
     public function update(Request $request, Capitulo $capitulo)
 {

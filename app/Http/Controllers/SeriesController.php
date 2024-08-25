@@ -6,6 +6,7 @@ use App\Models\Serie;
 use App\Models\Categorias;
 use Illuminate\Http\Request;
 use App\Models\Temporada;
+use App\Models\Peliculas;
 
 class SeriesController extends Controller
 {
@@ -14,6 +15,40 @@ class SeriesController extends Controller
         $series = Serie::with('category')->paginate(10); // Cambia '10' al número de elementos que deseas por página
     return view('series.index', compact('series'));
     }
+    
+    public function lista(Request $request)
+{
+    $queryPeliculas = Peliculas::query();
+    $querySeries = Serie::query(); // Asegúrate de tener el modelo correcto para Series
+
+    if ($request->filled('search')) {
+        $search = $request->input('search');
+
+        // Buscar en películas
+        $queryPeliculas->where('title', 'LIKE', "%{$search}%")
+            ->orWhereHas('category', function($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%");
+            });
+
+        // Buscar en series
+        $querySeries->where('nombre_serie', 'LIKE', "%{$search}%")
+            ->orWhereHas('category', function($q) use ($search) {
+                $q->where('titulo', 'LIKE', "%{$search}%");
+            });
+    }
+
+    $peliculas = $queryPeliculas->get();
+    $series = $querySeries->get();
+
+    $categories = Categorias::with(['peliculas', 'series'])->get(); // Incluye series aquí si es necesario
+
+    return view('welcome', compact('peliculas', 'series', 'categories'));
+}
+
+
+
+
+
 
     public function create()
     {
@@ -28,15 +63,17 @@ class SeriesController extends Controller
             'nombre_serie' => 'required|string|max:500',
             'descripcion' => 'nullable|string',
             'fecha_de_lanzamiento' => 'required|date',
-            'imagen' => 'nullable|image|max:2048',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'posted' => 'required|in:yes,not',
             'category_id' => 'required|exists:categorias,id',
         ]);
 
         // Manejar la carga de la imagen si está presente
         if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('public/series_images');
-            $validated['imagen'] = basename($imagenPath);
+            $image = $request->file('imagen');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+            $validated['imagen'] = $imageName;
         }
 
         // Crear la serie en la base de datos
@@ -65,18 +102,23 @@ class SeriesController extends Controller
         $request->validate([
             'nombre_serie' => 'required|string|max:500',
             'descripcion' => 'nullable|string',
-            'fecha_de_lanzamiento' => 'required|string|max:500',
-            'imagen' => 'nullable|image|max:2048',
+            'fecha_de_lanzamiento' => 'required|date',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'posted' => 'required|in:yes,not',
             'category_id' => 'required|exists:categorias,id',
         ]);
 
         $serie = Serie::findOrFail($id);
-        $serie->update($request->all());
 
+        // Actualizar los datos de la serie
+        $serie->update($request->except('imagen'));
+
+        // Manejar la carga de la imagen si está presente
         if ($request->hasFile('imagen')) {
-            $path = $request->file('imagen')->store('public/series_images');
-            $serie->imagen = basename($path);
+            $image = $request->file('imagen');
+            $imageName = time() . '.' . $image->extension();
+            $image->move(public_path('images'), $imageName);
+            $serie->imagen = $imageName;
             $serie->save();
         }
 

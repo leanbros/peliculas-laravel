@@ -106,103 +106,124 @@
     
 
     <main class="container mx-auto px-4 py-8 mt-16">
-        <!-- Aumentar el margen superior y añadir padding inferior -->
-        @if(request()->filled('search'))
-        <div class="mb-8">
+    @if(request()->filled('search'))
+        <div class="mt-6">
             <h2 class="text-2xl font-bold mb-4 text-white">Resultados de la búsqueda</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
 
-                <div
-                    class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
+            <!-- Resultados combinados -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                <!-- Resultados de Películas -->
+                @if($peliculas->isNotEmpty())
                     @foreach ($peliculas as $pelicula)
-                    @if ($loop->index < 5) <div
-                        class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
-                        <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
-                            @if($pelicula->image)
-                            <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}"
-                                class="w-full h-64 object-cover">
-                            @endif
-                            <div class="p-4">
-                                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                                    {{ $pelicula->title }}</h2>
+                        @if ($loop->index < 5)
+                            <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                                <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
+                                    @if($pelicula->image)
+                                        <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}" class="w-full h-64 object-cover">
+                                    @endif
+                                    <div class="p-4">
+                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $pelicula->title }}</h2>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                </div>
+                        @endif
+                    @endforeach
                 @endif
-                @endforeach
+
+                <!-- Resultados de Series -->
+                @if($series->isNotEmpty())
+                    @foreach ($series as $serie)
+                        @if ($loop->index < 5)
+                            <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                                <a href="{{ route('series.show', $serie->id) }}" class="block">
+                                    @if($serie->image)
+                                        <img src="{{ asset('images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="w-full h-64 object-cover">
+                                    @endif
+                                    <div class="p-4">
+                                        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $serie->nombre_serie }}</h2>
+                                    </div>
+                                </a>
+                            </div>
+                        @endif
+                    @endforeach
+                @endif
             </div>
         </div>
-        @else
-        <div class="container mx-auto py-8">
-    @foreach ($categories as $category)
-        @if ($category->peliculas->count() > 0 || $category->series->count() > 0)
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-white mb-4">{{ $category->titulo }}</h2>
+    @else
+        
+    @endif
 
-                <!-- Películas -->
-                @if ($category->peliculas->count() > 0)
-                    <h3 class="text-xl font-semibold text-gray-300 mb-2">Películas</h3>
-                    <div class="relative group carousel-container">
-                        <!-- Botón anterior -->
-                        <button class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
-                        <div class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
-                            @foreach ($category->peliculas as $pelicula)
-                                @if ($loop->index < 5)
-                                    <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
-                                        <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
-                                            @if($pelicula->image)
-                                                <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}" class="w-full h-64 object-cover">
-                                            @endif
-                                            <div class="p-4">
-                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $pelicula->title }}</h2>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endif
-                            @endforeach
+    <!-- Categorías y sus películas/series -->
+    <div class="container mx-auto py-8">
+        @foreach ($categories as $category)
+            @if ($category->peliculas->count() > 0 || $category->series->count() > 0)
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-4">{{ $category->titulo }}</h2>
+
+                    <!-- Películas -->
+                    @if ($category->peliculas->count() > 0)
+                        <h3 class="text-xl font-semibold text-gray-300 mb-2">Películas</h3>
+                        <div class="relative group carousel-container">
+                            <!-- Botón anterior -->
+                            <button class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
+                            <div class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
+                                @foreach ($category->peliculas as $pelicula)
+                                    @if ($loop->index < 5)
+                                        <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                                            <a href="{{ route('peliculas.show', $pelicula->id) }}" class="block">
+                                                @if($pelicula->image)
+                                                    <img src="{{ asset('images/' . $pelicula->image) }}" alt="{{ $pelicula->title }}" class="w-full h-64 object-cover">
+                                                @endif
+                                                <div class="p-4">
+                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $pelicula->title }}</h2>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <!-- Botón siguiente -->
+                            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
                         </div>
-                        <!-- Botón siguiente -->
-                        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
-                    </div>
-                @endif
+                    @endif
 
-                <!-- Series -->
-                @if ($category->series->count() > 0)
-                    <h3 class="text-xl font-semibold text-gray-300 mb-2 mt-4">Series</h3>
-                    <div class="relative group carousel-container">
-                        <!-- Botón anterior -->
-                        <button class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
-                        <div class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
-                            @foreach ($category->series as $serie)
-                                @if ($loop->index < 5)
-                                    <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
-                                        <a href="{{ route('series.show', $serie->id) }}" class="block">
-                                            @if($serie->imagen)
-                                                <img src="{{ asset('storage/series_images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="w-full h-64 object-cover">
-                                            @endif
-                                            <div class="p-4">
-                                                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $serie->nombre_serie }}</h2>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endif
-                            @endforeach
+                    <!-- Series -->
+                    @if ($category->series->count() > 0)
+                        <h3 class="text-xl font-semibold text-gray-300 mb-2 mt-4">Series</h3>
+                        <div class="relative group carousel-container">
+                            <!-- Botón anterior -->
+                            <button class="absolute left-0 top-1/2 transform -translate-y-3/4 bg-gray-800 text-white p-2 rounded-full carousel-prev hidden">‹</button>
+                            <div class="flex overflow-x-scroll space-x-8 p-4 scrollbar-hide carousel-container bg-gray-900 dark:bg-gray-700 rounded-lg">
+                                @foreach ($category->series as $serie)
+                                    @if ($loop->index < 5)
+                                        <div class="w-48 flex-shrink-0 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800">
+                                            <a href="{{ route('series.show', $serie->id) }}" class="block">
+                                                @if($serie->imagen)
+                                                    <img src="{{ asset('images/' . $serie->imagen) }}" alt="{{ $serie->nombre_serie }}" class="w-full h-64 object-cover">
+                                                @endif
+                                                <div class="p-4">
+                                                    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ $serie->nombre_serie }}</h2>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <!-- Botón siguiente -->
+                            <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
                         </div>
-                        <!-- Botón siguiente -->
-                        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full carousel-next hidden">›</button>
-                    </div>
-                @endif
-            </div>
-        @endif
-    @endforeach
-</div>
+                    @endif
+                </div>
+            @endif
+        @endforeach
+    </div>
 
-        @endif
-    </main>
+</main>
 
-    <footer class="py-16 text-center text-sm bg-gray-800 text-white">
-        Dondiman
-    </footer>
+<footer class="py-16 text-center text-sm bg-gray-800 text-white">
+    Dondiman
+</footer>
+
 
     <style>
     [data-carousel="slide"] {
